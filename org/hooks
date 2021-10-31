@@ -1,0 +1,21 @@
+#!/bin/bash
+set -u
+
+# Test hooks path and write default if unset
+hooksPath=$(git config --global core.hooksPath)
+git config --global core.hooksPath ${hooksPath:="~/.config/git/hooks"}
+
+eval mkdir -p ${hooksPath}/{pre-commit,commit-msg,prepare-commit-msg}.d
+
+eval cp lib/global.hook ${hooksPath}/
+
+prior=`pwd` ; eval cd $hooksPath 
+for link in {pre-commit,commit-msg,prepare-commit-msg}
+  do ln -sf global.hook $link ; done
+cd $prior
+
+# Install git-secrets to global config
+lib/git-secrets/git-secrets --register-aws --global
+lib/git-secrets/git-secrets --install $(eval dirname ${hooksPath})
+
+cd lib/git-secrets/ && sudo make install

@@ -1,0 +1,6 @@
+#!/bin/sh
+set -u
+for global_hook in $0.d/*; do $global_hook ; done
+local_hook=./.git/hooks/$(basename "$0")
+test -e $local_hook || exit 0 
+${local_hook} 

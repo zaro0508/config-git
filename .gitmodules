@@ -1,0 +1,3 @@
+[submodule "lib/git-secrets"]
+	path = lib/git-secrets
+	url = https://github.com/awslabs/git-secrets.git
